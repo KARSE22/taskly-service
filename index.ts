@@ -7,6 +7,7 @@ import { errorHandler } from "@/middleware/error-handler.ts";
 import { disconnectDb } from "@/db.ts";
 import boards from "@/routes/boards.ts";
 import tasks from "@/routes/tasks.ts";
+import subtasks from "@/routes/subtasks.ts";
 
 const app = new OpenAPIHono();
 
@@ -17,6 +18,7 @@ app.use("*", cors());
 // Routes
 app.route("/api/boards", boards);
 app.route("/api/tasks", tasks);
+app.route("/api/subtasks", subtasks);
 
 // Health check
 app.get("/health", (c) => c.json({ status: "ok" }));

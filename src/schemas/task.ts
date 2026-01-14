@@ -40,3 +40,18 @@ export const UpdateTaskSchema = z.object({
 export const TaskQuerySchema = z.object({
   boardStatusId: z.string().uuid().optional(),
 });
+
+export const CreateSubTaskSchema = z.object({
+  taskId: z.string().uuid(),
+  description: z.string().min(1, "Description is required").max(500),
+  isCompleted: z.boolean().optional(),
+}).openapi("CreateSubTask");
+
+export const UpdateSubTaskSchema = z.object({
+  description: z.string().min(1).max(500).optional(),
+  isCompleted: z.boolean().optional(),
+}).openapi("UpdateSubTask");
+
+export const SubTaskQuerySchema = z.object({
+  taskId: z.string().uuid().optional(),
+});
