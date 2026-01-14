@@ -34,6 +34,14 @@ bun --bun run prisma migrate dev
 bun --bun run prisma db seed
 ```
 
+## Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `DATABASE_URL` | PostgreSQL connection string | Required |
+| `PORT` | Server port | `8080` |
+| `NODE_ENV` | Environment (`development`, `production`, `test`) | `development` |
+
 ## Running
 
 ```bash
@@ -44,7 +52,7 @@ bun run index.ts
 bun --hot run index.ts
 ```
 
-Server runs at `http://localhost:8080`
+Server runs at `http://localhost:${PORT}` (default: 8080)
 
 ## Testing
 
@@ -69,9 +77,9 @@ bun test tests/boards.test.ts
 
 ## API Documentation
 
-Interactive API docs available at `http://localhost:8080/docs`
+Interactive API docs available at `/docs`
 
-OpenAPI spec at `http://localhost:8080/openapi.json`
+OpenAPI spec at `/openapi.json`
 
 ## API Endpoints
 
