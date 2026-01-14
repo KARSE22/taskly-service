@@ -1,11 +1,12 @@
-import { Hono } from "hono";
+import { OpenAPIHono } from "@hono/zod-openapi";
+import { apiReference } from "@scalar/hono-api-reference";
 import { logger } from "hono/logger";
 import { cors } from "hono/cors";
 import { errorHandler } from "./src/middleware/error-handler.ts";
 import { disconnectDb } from "./src/db.ts";
 import boards from "./src/routes/boards.ts";
 
-const app = new Hono();
+const app = new OpenAPIHono();
 
 // Middleware
 app.use("*", logger());
@@ -16,6 +17,24 @@ app.route("/api/boards", boards);
 
 // Health check
 app.get("/health", (c) => c.json({ status: "ok" }));
+
+// OpenAPI JSON spec
+app.doc("/openapi.json", {
+  openapi: "3.1.0",
+  info: {
+    title: "Taskly API",
+    version: "1.0.0",
+    description: "Task management API",
+  },
+});
+
+// API documentation UI
+app.get(
+  "/docs",
+  apiReference({
+    url: "/openapi.json",
+  })
+);
 
 // Error handling
 app.onError(errorHandler);
@@ -44,3 +63,4 @@ export default {
 };
 
 console.log(`Server running at http://localhost:${port}`);
+console.log(`API docs at http://localhost:${port}/docs`);

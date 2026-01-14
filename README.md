@@ -42,6 +42,12 @@ bun --hot run index.ts
 
 Server runs at `http://localhost:8080`
 
+## API Documentation
+
+Interactive API docs available at `http://localhost:8080/docs`
+
+OpenAPI spec at `http://localhost:8080/openapi.json`
+
 ## API Endpoints
 
 ### Boards
