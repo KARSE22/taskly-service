@@ -42,6 +42,24 @@ bun --hot run index.ts
 
 Server runs at `http://localhost:8080`
 
+## Testing
+
+Tests run against a separate test database configured in `.env.test`.
+
+```bash
+# Create test database
+createdb taskly_test
+
+# Run migrations on test database
+DATABASE_URL="postgresql://username@localhost:5432/taskly_test?schema=public" bun --bun run prisma migrate deploy
+
+# Run all tests
+bun test
+
+# Run a single test file
+bun test tests/boards.test.ts
+```
+
 ## API Documentation
 
 Interactive API docs available at `http://localhost:8080/docs`
@@ -126,6 +144,11 @@ PUT /api/tasks/:id
 │   └── routes/
 │       ├── boards.ts
 │       └── tasks.ts
+├── tests/
+│   ├── setup.ts          # Test database utilities
+│   ├── app.ts            # Test app instance
+│   ├── boards.test.ts
+│   └── tasks.test.ts
 ├── prisma/
 │   ├── schema.prisma     # Database schema
 │   ├── seed.ts           # Seed data
