@@ -160,6 +160,10 @@ const updateTaskRoute = createRoute({
 tasks.openapi(updateTaskRoute, async (c) => {
   const { id } = c.req.valid("param");
   const data = c.req.valid("json");
+  const existing = await db.task.findUnique({ where: { id } });
+  if (!existing) {
+    return c.json({ error: "Task not found" }, 404);
+  }
   const task = await db.task.update({ where: { id }, data });
   return c.json(task, 200);
 });
@@ -183,6 +187,10 @@ const deleteTaskRoute = createRoute({
 
 tasks.openapi(deleteTaskRoute, async (c) => {
   const { id } = c.req.valid("param");
+  const existing = await db.task.findUnique({ where: { id } });
+  if (!existing) {
+    return c.json({ error: "Task not found" }, 404);
+  }
   await db.task.delete({ where: { id } });
   return c.body(null, 204);
 });

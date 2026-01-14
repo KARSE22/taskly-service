@@ -178,6 +178,10 @@ const updateBoardRoute = createRoute({
 boards.openapi(updateBoardRoute, async (c) => {
   const { id } = c.req.valid("param");
   const data = c.req.valid("json");
+  const existing = await db.board.findUnique({ where: { id } });
+  if (!existing) {
+    return c.json({ error: "Board not found" }, 404);
+  }
   const board = await db.board.update({ where: { id }, data });
   return c.json(board, 200);
 });
@@ -201,6 +205,10 @@ const deleteBoardRoute = createRoute({
 
 boards.openapi(deleteBoardRoute, async (c) => {
   const { id } = c.req.valid("param");
+  const existing = await db.board.findUnique({ where: { id } });
+  if (!existing) {
+    return c.json({ error: "Board not found" }, 404);
+  }
   await db.board.delete({ where: { id } });
   return c.body(null, 204);
 });
