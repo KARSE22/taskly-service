@@ -1,5 +1,5 @@
 import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
-import { db } from "../db.ts";
+import { db } from "@/db.ts";
 
 const boards = new OpenAPIHono();
 

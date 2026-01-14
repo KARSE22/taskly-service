@@ -1,5 +1,5 @@
 import type { Context } from "hono";
-import { Prisma } from "../../generated/prisma/client.ts";
+import { Prisma } from "@prisma/client.ts";
 
 export async function errorHandler(err: Error, c: Context) {
   console.error(`[Error] ${err.message}`, err.stack);

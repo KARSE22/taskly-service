@@ -2,9 +2,10 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { apiReference } from "@scalar/hono-api-reference";
 import { logger } from "hono/logger";
 import { cors } from "hono/cors";
-import { errorHandler } from "./src/middleware/error-handler.ts";
-import { disconnectDb } from "./src/db.ts";
-import boards from "./src/routes/boards.ts";
+import { errorHandler } from "@/middleware/error-handler.ts";
+import { disconnectDb } from "@/db.ts";
+import boards from "@/routes/boards.ts";
+import tasks from "@/routes/tasks.ts";
 
 const app = new OpenAPIHono();
 
@@ -14,6 +15,7 @@ app.use("*", cors());
 
 // Routes
 app.route("/api/boards", boards);
+app.route("/api/tasks", tasks);
 
 // Health check
 app.get("/health", (c) => c.json({ status: "ok" }));

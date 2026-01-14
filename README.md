@@ -78,6 +78,37 @@ PUT /api/boards/:id
 }
 ```
 
+### Tasks
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/tasks` | List all tasks (filter by `?boardStatusId=`) |
+| GET | `/api/tasks/:id` | Get task with subtasks |
+| POST | `/api/tasks` | Create task |
+| PUT | `/api/tasks/:id` | Update task |
+| DELETE | `/api/tasks/:id` | Delete task |
+
+#### Create Task
+```json
+POST /api/tasks
+{
+  "boardStatusId": "uuid",
+  "title": "Task title",
+  "description": "Optional description",
+  "position": 0
+}
+```
+
+#### Update Task
+```json
+PUT /api/tasks/:id
+{
+  "title": "Updated title",
+  "boardStatusId": "uuid",
+  "position": 1
+}
+```
+
 ### Health Check
 
 | Method | Endpoint | Description |
@@ -93,7 +124,8 @@ PUT /api/boards/:id
 │   ├── middleware/
 │   │   └── error-handler.ts
 │   └── routes/
-│       └── boards.ts
+│       ├── boards.ts
+│       └── tasks.ts
 ├── prisma/
 │   ├── schema.prisma     # Database schema
 │   ├── seed.ts           # Seed data
