@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Board {
+  id          String        @id @default(uuid())
+  description String?
+  name        String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  statuses    BoardStatus[]
+}
+
+model BoardStatus {
+  id          String   @id @default(uuid())
+  board       Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  boardId     String
+  name        String
+  position    Int
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tasks       Task[]
+
+  @@index([boardId, position])
+}
+
+model Task {
+  id            String      @id @default(uuid())
+  boardStatusId String
+  boardStatus   BoardStatus @relation(fields: [boardStatusId], references: [id], onDelete: Cascade)
+  title         String
+  description   String?
+  position      Int
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  subTasks      SubTask[]
+
+  @@index([boardStatusId, position])
+}
+
+model SubTask {
+  id          String   @id @default(uuid())
+  taskId      String
+  task        Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  isCompleted Boolean  @default(false)
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
