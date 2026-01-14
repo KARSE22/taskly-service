@@ -1,65 +1,15 @@
 import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
 import { db } from "@/db.ts";
+import {
+  BoardSchema,
+  BoardWithStatusesSchema,
+  CreateBoardSchema,
+  UpdateBoardSchema,
+  ErrorSchema,
+  IdParamSchema,
+} from "@/schemas/index.ts";
 
 const boards = new OpenAPIHono();
-
-// Schemas
-const BoardSchema = z.object({
-  id: z.string().uuid(),
-  name: z.string(),
-  description: z.string().nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-}).openapi("Board");
-
-const SubTaskSchema = z.object({
-  id: z.string().uuid(),
-  taskId: z.string().uuid(),
-  description: z.string(),
-  isCompleted: z.boolean(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-}).openapi("SubTask");
-
-const TaskSchema = z.object({
-  id: z.string().uuid(),
-  boardStatusId: z.string().uuid(),
-  title: z.string(),
-  description: z.string().nullable(),
-  position: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  subTasks: z.array(SubTaskSchema),
-}).openapi("Task");
-
-const BoardStatusSchema = z.object({
-  id: z.string().uuid(),
-  boardId: z.string().uuid(),
-  name: z.string(),
-  description: z.string().nullable(),
-  position: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  tasks: z.array(TaskSchema),
-}).openapi("BoardStatus");
-
-const BoardWithStatusesSchema = BoardSchema.extend({
-  statuses: z.array(BoardStatusSchema),
-}).openapi("BoardWithStatuses");
-
-const CreateBoardSchema = z.object({
-  name: z.string().min(1, "Name is required").max(100),
-  description: z.string().max(500).optional(),
-}).openapi("CreateBoard");
-
-const UpdateBoardSchema = z.object({
-  name: z.string().min(1).max(100).optional(),
-  description: z.string().max(500).nullable().optional(),
-}).openapi("UpdateBoard");
-
-const ErrorSchema = z.object({
-  error: z.string(),
-}).openapi("Error");
 
 // Routes
 const listBoardsRoute = createRoute({
@@ -88,7 +38,7 @@ const getBoardRoute = createRoute({
   tags: ["Boards"],
   summary: "Get board by ID",
   request: {
-    params: z.object({ id: z.string().uuid() }),
+    params: IdParamSchema,
   },
   responses: {
     200: {
@@ -158,7 +108,7 @@ const updateBoardRoute = createRoute({
   tags: ["Boards"],
   summary: "Update a board",
   request: {
-    params: z.object({ id: z.string().uuid() }),
+    params: IdParamSchema,
     body: {
       content: { "application/json": { schema: UpdateBoardSchema } },
     },
@@ -192,7 +142,7 @@ const deleteBoardRoute = createRoute({
   tags: ["Boards"],
   summary: "Delete a board",
   request: {
-    params: z.object({ id: z.string().uuid() }),
+    params: IdParamSchema,
   },
   responses: {
     204: { description: "Board deleted" },

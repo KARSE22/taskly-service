@@ -1,49 +1,16 @@
 import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
 import { db } from "@/db.ts";
+import {
+  TaskSchema,
+  TaskWithSubTasksSchema,
+  CreateTaskSchema,
+  UpdateTaskSchema,
+  TaskQuerySchema,
+  ErrorSchema,
+  IdParamSchema,
+} from "@/schemas/index.ts";
 
 const tasks = new OpenAPIHono();
-
-// Schemas
-const SubTaskSchema = z.object({
-  id: z.string().uuid(),
-  taskId: z.string().uuid(),
-  description: z.string(),
-  isCompleted: z.boolean(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-}).openapi("SubTask");
-
-const TaskSchema = z.object({
-  id: z.string().uuid(),
-  boardStatusId: z.string().uuid(),
-  title: z.string(),
-  description: z.string().nullable(),
-  position: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-}).openapi("Task");
-
-const TaskWithSubTasksSchema = TaskSchema.extend({
-  subTasks: z.array(SubTaskSchema),
-}).openapi("TaskWithSubTasks");
-
-const CreateTaskSchema = z.object({
-  boardStatusId: z.string().uuid(),
-  title: z.string().min(1, "Title is required").max(200),
-  description: z.string().max(1000).optional(),
-  position: z.number().int().min(0),
-}).openapi("CreateTask");
-
-const UpdateTaskSchema = z.object({
-  boardStatusId: z.string().uuid().optional(),
-  title: z.string().min(1).max(200).optional(),
-  description: z.string().max(1000).nullable().optional(),
-  position: z.number().int().min(0).optional(),
-}).openapi("UpdateTask");
-
-const ErrorSchema = z.object({
-  error: z.string(),
-}).openapi("Error");
 
 // Routes
 const listTasksRoute = createRoute({
@@ -52,9 +19,7 @@ const listTasksRoute = createRoute({
   tags: ["Tasks"],
   summary: "List all tasks",
   request: {
-    query: z.object({
-      boardStatusId: z.string().uuid().optional(),
-    }),
+    query: TaskQuerySchema,
   },
   responses: {
     200: {
@@ -80,7 +45,7 @@ const getTaskRoute = createRoute({
   tags: ["Tasks"],
   summary: "Get task by ID",
   request: {
-    params: z.object({ id: z.string().uuid() }),
+    params: IdParamSchema,
   },
   responses: {
     200: {
@@ -140,7 +105,7 @@ const updateTaskRoute = createRoute({
   tags: ["Tasks"],
   summary: "Update a task",
   request: {
-    params: z.object({ id: z.string().uuid() }),
+    params: IdParamSchema,
     body: {
       content: { "application/json": { schema: UpdateTaskSchema } },
     },
@@ -174,7 +139,7 @@ const deleteTaskRoute = createRoute({
   tags: ["Tasks"],
   summary: "Delete a task",
   request: {
-    params: z.object({ id: z.string().uuid() }),
+    params: IdParamSchema,
   },
   responses: {
     204: { description: "Task deleted" },

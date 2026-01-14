@@ -5,10 +5,11 @@ A task management API built with Bun, Hono, and Prisma.
 ## Tech Stack
 
 - **Runtime**: Bun
-- **Framework**: Hono
+- **Framework**: Hono with OpenAPI
 - **Database**: PostgreSQL
 - **ORM**: Prisma
 - **Validation**: Zod
+- **API Docs**: Scalar
 
 ## Setup
 
@@ -145,11 +146,18 @@ PUT /api/tasks/:id
 ├── index.ts              # Entry point
 ├── src/
 │   ├── db.ts             # Prisma client
+│   ├── config/
+│   │   └── index.ts      # Environment validation
 │   ├── middleware/
 │   │   └── error-handler.ts
-│   └── routes/
-│       ├── boards.ts
-│       └── tasks.ts
+│   ├── routes/
+│   │   ├── boards.ts
+│   │   └── tasks.ts
+│   └── schemas/
+│       ├── index.ts      # Schema exports
+│       ├── common.ts     # Shared schemas (Error, IdParam)
+│       ├── board.ts      # Board schemas
+│       └── task.ts       # Task schemas
 ├── tests/
 │   ├── setup.ts          # Test database utilities
 │   ├── app.ts            # Test app instance
@@ -162,3 +170,9 @@ PUT /api/tasks/:id
 └── generated/
     └── prisma/           # Generated Prisma client
 ```
+
+## Path Aliases
+
+The project uses TypeScript path aliases:
+- `@/*` - Maps to `./src/*`
+- `@prisma/*` - Maps to `./generated/prisma/*`

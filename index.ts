@@ -2,6 +2,7 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { apiReference } from "@scalar/hono-api-reference";
 import { logger } from "hono/logger";
 import { cors } from "hono/cors";
+import { config } from "@/config/index.ts";
 import { errorHandler } from "@/middleware/error-handler.ts";
 import { disconnectDb } from "@/db.ts";
 import boards from "@/routes/boards.ts";
@@ -57,12 +58,10 @@ process.on("SIGTERM", async () => {
   process.exit(0);
 });
 
-const port = process.env.PORT || 8080;
-
 export default {
-  port,
+  port: config.PORT,
   fetch: app.fetch,
 };
 
-console.log(`Server running at http://localhost:${port}`);
-console.log(`API docs at http://localhost:${port}/docs`);
+console.log(`Server running at http://localhost:${config.PORT}`);
+console.log(`API docs at http://localhost:${config.PORT}/docs`);
