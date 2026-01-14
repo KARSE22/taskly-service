@@ -11,8 +11,10 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@hono/zod-openapi": "^1.2.0",
     "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.2.0",
+    "@scalar/hono-api-reference": "^0.9.32",
     "dotenv": "^17.2.3",
     "hono": "^4.11.4",
     "pg": "^8.16.3",
