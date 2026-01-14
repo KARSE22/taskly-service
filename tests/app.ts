@@ -7,9 +7,9 @@ import subtasks from "@/routes/subtasks.ts";
 export function createTestApp() {
   const app = new OpenAPIHono();
 
-  app.route("/api/boards", boards);
-  app.route("/api/tasks", tasks);
-  app.route("/api/subtasks", subtasks);
+  app.route("/api/v1/boards", boards);
+  app.route("/api/v1/tasks", tasks);
+  app.route("/api/v1/subtasks", subtasks);
   app.get("/health", (c) => c.json({ status: "ok" }));
   app.onError(errorHandler);
   app.notFound((c) => c.json({ error: "Not found" }, 404));

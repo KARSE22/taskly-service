@@ -47,7 +47,7 @@ export const BoardStatusBaseSchema = z.object({
 export const CreateBoardStatusSchema = z.object({
   name: z.string().min(1, "Name is required").max(100),
   description: z.string().max(500).optional(),
-  position: z.number().int().min(0),
+  position: z.number().int().min(0).optional(),
 }).openapi("CreateBoardStatus");
 
 export const UpdateBoardStatusSchema = z.object({

@@ -41,9 +41,9 @@ afterEach(async () => {
   await cleanupDatabase();
 });
 
-describe("GET /api/subtasks", () => {
+describe("GET /api/v1/subtasks", () => {
   test("returns empty array when no subtasks exist", async () => {
-    const res = await app.request("/api/subtasks");
+    const res = await app.request("/api/v1/subtasks");
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual([]);
   });
@@ -56,7 +56,7 @@ describe("GET /api/subtasks", () => {
       data: { taskId, description: "Subtask 2", isCompleted: true },
     });
 
-    const res = await app.request("/api/subtasks");
+    const res = await app.request("/api/v1/subtasks");
     expect(res.status).toBe(200);
 
     const subtasks = await res.json();
@@ -80,7 +80,7 @@ describe("GET /api/subtasks", () => {
       data: { taskId: task2.id, description: "Subtask 2", isCompleted: false },
     });
 
-    const res = await app.request(`/api/subtasks?taskId=${taskId}`);
+    const res = await app.request(`/api/v1/subtasks?taskId=${taskId}`);
     expect(res.status).toBe(200);
 
     const subtasks = (await res.json()) as SubTask[];
@@ -89,13 +89,13 @@ describe("GET /api/subtasks", () => {
   });
 });
 
-describe("GET /api/subtasks/:id", () => {
+describe("GET /api/v1/subtasks/:id", () => {
   test("returns subtask by id", async () => {
     const subtask = await testDb.subTask.create({
       data: { taskId, description: "Test Subtask", isCompleted: false },
     });
 
-    const res = await app.request(`/api/subtasks/${subtask.id}`);
+    const res = await app.request(`/api/v1/subtasks/${subtask.id}`);
     expect(res.status).toBe(200);
 
     const result = (await res.json()) as SubTask;
@@ -104,14 +104,14 @@ describe("GET /api/subtasks/:id", () => {
   });
 
   test("returns 404 for non-existent subtask", async () => {
-    const res = await app.request("/api/subtasks/00000000-0000-0000-0000-000000000000");
+    const res = await app.request("/api/v1/subtasks/00000000-0000-0000-0000-000000000000");
     expect(res.status).toBe(404);
   });
 });
 
-describe("POST /api/subtasks", () => {
+describe("POST /api/v1/subtasks", () => {
   test("creates a subtask", async () => {
-    const res = await app.request("/api/subtasks", {
+    const res = await app.request("/api/v1/subtasks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -129,7 +129,7 @@ describe("POST /api/subtasks", () => {
   });
 
   test("creates a subtask with isCompleted", async () => {
-    const res = await app.request("/api/subtasks", {
+    const res = await app.request("/api/v1/subtasks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -146,7 +146,7 @@ describe("POST /api/subtasks", () => {
   });
 
   test("returns 400 for missing description", async () => {
-    const res = await app.request("/api/subtasks", {
+    const res = await app.request("/api/v1/subtasks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -158,7 +158,7 @@ describe("POST /api/subtasks", () => {
   });
 
   test("returns 400 for invalid taskId", async () => {
-    const res = await app.request("/api/subtasks", {
+    const res = await app.request("/api/v1/subtasks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -171,13 +171,13 @@ describe("POST /api/subtasks", () => {
   });
 });
 
-describe("PUT /api/subtasks/:id", () => {
+describe("PUT /api/v1/subtasks/:id", () => {
   test("updates subtask description", async () => {
     const subtask = await testDb.subTask.create({
       data: { taskId, description: "Original", isCompleted: false },
     });
 
-    const res = await app.request(`/api/subtasks/${subtask.id}`, {
+    const res = await app.request(`/api/v1/subtasks/${subtask.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ description: "Updated" }),
@@ -194,7 +194,7 @@ describe("PUT /api/subtasks/:id", () => {
       data: { taskId, description: "Test", isCompleted: false },
     });
 
-    const res = await app.request(`/api/subtasks/${subtask.id}`, {
+    const res = await app.request(`/api/v1/subtasks/${subtask.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ isCompleted: true }),
@@ -207,7 +207,7 @@ describe("PUT /api/subtasks/:id", () => {
   });
 
   test("returns 404 for non-existent subtask", async () => {
-    const res = await app.request("/api/subtasks/00000000-0000-0000-0000-000000000000", {
+    const res = await app.request("/api/v1/subtasks/00000000-0000-0000-0000-000000000000", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ description: "Updated" }),
@@ -217,13 +217,13 @@ describe("PUT /api/subtasks/:id", () => {
   });
 });
 
-describe("DELETE /api/subtasks/:id", () => {
+describe("DELETE /api/v1/subtasks/:id", () => {
   test("deletes a subtask", async () => {
     const subtask = await testDb.subTask.create({
       data: { taskId, description: "To Delete", isCompleted: false },
     });
 
-    const res = await app.request(`/api/subtasks/${subtask.id}`, {
+    const res = await app.request(`/api/v1/subtasks/${subtask.id}`, {
       method: "DELETE",
     });
 
@@ -234,7 +234,7 @@ describe("DELETE /api/subtasks/:id", () => {
   });
 
   test("returns 404 for non-existent subtask", async () => {
-    const res = await app.request("/api/subtasks/00000000-0000-0000-0000-000000000000", {
+    const res = await app.request("/api/v1/subtasks/00000000-0000-0000-0000-000000000000", {
       method: "DELETE",
     });
 

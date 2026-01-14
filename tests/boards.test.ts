@@ -19,9 +19,9 @@ afterEach(async () => {
   await cleanupDatabase();
 });
 
-describe("GET /api/boards", () => {
+describe("GET /api/v1/boards", () => {
   test("returns empty array when no boards exist", async () => {
-    const res = await app.request("/api/boards");
+    const res = await app.request("/api/v1/boards");
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual([]);
   });
@@ -30,7 +30,7 @@ describe("GET /api/boards", () => {
     await testDb.board.create({ data: { name: "Board 1" } });
     await testDb.board.create({ data: { name: "Board 2" } });
 
-    const res = await app.request("/api/boards");
+    const res = await app.request("/api/v1/boards");
     expect(res.status).toBe(200);
 
     const boards = await res.json();
@@ -38,7 +38,7 @@ describe("GET /api/boards", () => {
   });
 });
 
-describe("GET /api/boards/:id", () => {
+describe("GET /api/v1/boards/:id", () => {
   test("returns board with statuses and tasks", async () => {
     const board = await testDb.board.create({
       data: {
@@ -50,7 +50,7 @@ describe("GET /api/boards/:id", () => {
       include: { statuses: true },
     });
 
-    const res = await app.request(`/api/boards/${board.id}`);
+    const res = await app.request(`/api/v1/boards/${board.id}`);
     expect(res.status).toBe(200);
 
     const result = (await res.json()) as Board;
@@ -60,14 +60,14 @@ describe("GET /api/boards/:id", () => {
   });
 
   test("returns 404 for non-existent board", async () => {
-    const res = await app.request("/api/boards/00000000-0000-0000-0000-000000000000");
+    const res = await app.request("/api/v1/boards/00000000-0000-0000-0000-000000000000");
     expect(res.status).toBe(404);
   });
 });
 
-describe("POST /api/boards", () => {
+describe("POST /api/v1/boards", () => {
   test("creates a board", async () => {
-    const res = await app.request("/api/boards", {
+    const res = await app.request("/api/v1/boards", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: "New Board", description: "A test board" }),
@@ -82,7 +82,7 @@ describe("POST /api/boards", () => {
   });
 
   test("returns 400 for invalid data", async () => {
-    const res = await app.request("/api/boards", {
+    const res = await app.request("/api/v1/boards", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: "" }),
@@ -92,7 +92,7 @@ describe("POST /api/boards", () => {
   });
 
   test("returns 400 for missing name", async () => {
-    const res = await app.request("/api/boards", {
+    const res = await app.request("/api/v1/boards", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ description: "No name" }),
@@ -102,11 +102,11 @@ describe("POST /api/boards", () => {
   });
 });
 
-describe("PUT /api/boards/:id", () => {
+describe("PUT /api/v1/boards/:id", () => {
   test("updates a board", async () => {
     const board = await testDb.board.create({ data: { name: "Original" } });
 
-    const res = await app.request(`/api/boards/${board.id}`, {
+    const res = await app.request(`/api/v1/boards/${board.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: "Updated", description: "New description" }),
@@ -120,7 +120,7 @@ describe("PUT /api/boards/:id", () => {
   });
 
   test("returns 404 for non-existent board", async () => {
-    const res = await app.request("/api/boards/00000000-0000-0000-0000-000000000000", {
+    const res = await app.request("/api/v1/boards/00000000-0000-0000-0000-000000000000", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: "Updated" }),
@@ -130,11 +130,11 @@ describe("PUT /api/boards/:id", () => {
   });
 });
 
-describe("DELETE /api/boards/:id", () => {
+describe("DELETE /api/v1/boards/:id", () => {
   test("deletes a board", async () => {
     const board = await testDb.board.create({ data: { name: "To Delete" } });
 
-    const res = await app.request(`/api/boards/${board.id}`, {
+    const res = await app.request(`/api/v1/boards/${board.id}`, {
       method: "DELETE",
     });
 
@@ -145,7 +145,7 @@ describe("DELETE /api/boards/:id", () => {
   });
 
   test("returns 404 for non-existent board", async () => {
-    const res = await app.request("/api/boards/00000000-0000-0000-0000-000000000000", {
+    const res = await app.request("/api/v1/boards/00000000-0000-0000-0000-000000000000", {
       method: "DELETE",
     });
 

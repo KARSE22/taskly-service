@@ -15,10 +15,10 @@ const app = new OpenAPIHono();
 app.use("*", logger());
 app.use("*", cors());
 
-// Routes
-app.route("/api/boards", boards);
-app.route("/api/tasks", tasks);
-app.route("/api/subtasks", subtasks);
+// Routes (v1)
+app.route("/api/v1/boards", boards);
+app.route("/api/v1/tasks", tasks);
+app.route("/api/v1/subtasks", subtasks);
 
 // Health check
 app.get("/health", (c) => c.json({ status: "ok" }));
