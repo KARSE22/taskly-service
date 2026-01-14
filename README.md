@@ -16,6 +16,9 @@ A task management API built with Bun, Hono, and Prisma.
 # Install dependencies
 bun install
 
+# Create database
+createdb taskly
+
 # Set up environment
 cp .env.example .env
 # Edit .env with your DATABASE_URL
@@ -44,14 +47,17 @@ Server runs at `http://localhost:8080`
 
 ## Testing
 
-Tests run against a separate test database configured in `.env.test`.
+Tests run against a separate test database. Bun automatically loads `.env.test` when running tests.
 
 ```bash
 # Create test database
 createdb taskly_test
 
-# Run migrations on test database
-DATABASE_URL="postgresql://username@localhost:5432/taskly_test?schema=public" bun --bun run prisma migrate deploy
+# Create .env.test with test database URL
+echo 'DATABASE_URL="postgresql://YOUR_USERNAME@localhost:5432/taskly_test?schema=public"' > .env.test
+
+# Run migrations on test database (replace YOUR_USERNAME)
+DATABASE_URL="postgresql://YOUR_USERNAME@localhost:5432/taskly_test?schema=public" bun --bun run prisma migrate deploy
 
 # Run all tests
 bun test
