@@ -2,6 +2,22 @@
 
 A task management API built with Bun, Hono, and Prisma.
 
+## Table of Contents
+
+- [Tech Stack](#tech-stack)
+- [Setup](#setup)
+- [Environment Variables](#environment-variables)
+- [Running](#running)
+- [Testing](#testing)
+- [API Documentation](#api-documentation)
+- [API Endpoints](#api-endpoints)
+  - [Boards](#boards)
+  - [Tasks](#tasks)
+  - [Subtasks](#subtasks)
+  - [Health Check](#health-check)
+- [Project Structure](#project-structure)
+- [Path Aliases](#path-aliases)
+
 ## Tech Stack
 
 - **Runtime**: Bun
@@ -142,6 +158,35 @@ PUT /api/tasks/:id
 }
 ```
 
+### Subtasks
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/subtasks` | List all subtasks (filter by `?taskId=`) |
+| GET | `/api/subtasks/:id` | Get subtask by ID |
+| POST | `/api/subtasks` | Create subtask |
+| PUT | `/api/subtasks/:id` | Update subtask |
+| DELETE | `/api/subtasks/:id` | Delete subtask |
+
+#### Create Subtask
+```json
+POST /api/subtasks
+{
+  "taskId": "uuid",
+  "description": "Subtask description",
+  "isCompleted": false
+}
+```
+
+#### Update Subtask
+```json
+PUT /api/subtasks/:id
+{
+  "description": "Updated description",
+  "isCompleted": true
+}
+```
+
 ### Health Check
 
 | Method | Endpoint | Description |
@@ -160,7 +205,8 @@ PUT /api/tasks/:id
 │   │   └── error-handler.ts
 │   ├── routes/
 │   │   ├── boards.ts
-│   │   └── tasks.ts
+│   │   ├── tasks.ts
+│   │   └── subtasks.ts
 │   └── schemas/
 │       ├── index.ts      # Schema exports
 │       ├── common.ts     # Shared schemas (Error, IdParam)
@@ -170,7 +216,8 @@ PUT /api/tasks/:id
 │   ├── setup.ts          # Test database utilities
 │   ├── app.ts            # Test app instance
 │   ├── boards.test.ts
-│   └── tasks.test.ts
+│   ├── tasks.test.ts
+│   └── subtasks.test.ts
 ├── prisma/
 │   ├── schema.prisma     # Database schema
 │   ├── seed.ts           # Seed data
