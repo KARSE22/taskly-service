@@ -12,6 +12,7 @@ A task management API built with Bun, Hono, and Prisma.
 - [API Documentation](#api-documentation)
 - [API Endpoints](#api-endpoints)
   - [Boards](#boards)
+  - [Board Statuses](#board-statuses)
   - [Tasks](#tasks)
   - [Subtasks](#subtasks)
   - [Health Check](#health-check)
@@ -127,6 +128,37 @@ PUT /api/boards/:id
 }
 ```
 
+### Board Statuses
+
+Board statuses (columns) are managed as nested resources under boards.
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/boards/:boardId/statuses` | List all statuses for a board |
+| GET | `/api/boards/:boardId/statuses/:statusId` | Get status by ID |
+| POST | `/api/boards/:boardId/statuses` | Create status |
+| PUT | `/api/boards/:boardId/statuses/:statusId` | Update status |
+| DELETE | `/api/boards/:boardId/statuses/:statusId` | Delete status (cascades to tasks) |
+
+#### Create Status
+```json
+POST /api/boards/:boardId/statuses
+{
+  "name": "In Progress",
+  "description": "Tasks being worked on",
+  "position": 1
+}
+```
+
+#### Update Status
+```json
+PUT /api/boards/:boardId/statuses/:statusId
+{
+  "name": "Updated name",
+  "position": 2
+}
+```
+
 ### Tasks
 
 | Method | Endpoint | Description |
@@ -205,6 +237,7 @@ PUT /api/subtasks/:id
 │   │   └── error-handler.ts
 │   ├── routes/
 │   │   ├── boards.ts
+│   │   ├── statuses.ts
 │   │   ├── tasks.ts
 │   │   └── subtasks.ts
 │   └── schemas/
@@ -216,6 +249,7 @@ PUT /api/subtasks/:id
 │   ├── setup.ts          # Test database utilities
 │   ├── app.ts            # Test app instance
 │   ├── boards.test.ts
+│   ├── statuses.test.ts
 │   ├── tasks.test.ts
 │   └── subtasks.test.ts
 ├── prisma/

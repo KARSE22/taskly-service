@@ -33,3 +33,25 @@ export const UpdateBoardSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   description: z.string().max(500).nullable().optional(),
 }).openapi("UpdateBoard");
+
+export const BoardStatusBaseSchema = z.object({
+  id: z.string().uuid(),
+  boardId: z.string().uuid(),
+  name: z.string(),
+  description: z.string().nullable(),
+  position: z.number().int(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+}).openapi("BoardStatusBase");
+
+export const CreateBoardStatusSchema = z.object({
+  name: z.string().min(1, "Name is required").max(100),
+  description: z.string().max(500).optional(),
+  position: z.number().int().min(0),
+}).openapi("CreateBoardStatus");
+
+export const UpdateBoardStatusSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  description: z.string().max(500).nullable().optional(),
+  position: z.number().int().min(0).optional(),
+}).openapi("UpdateBoardStatus");

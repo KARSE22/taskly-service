@@ -8,8 +8,12 @@ import {
   ErrorSchema,
   IdParamSchema,
 } from "@/schemas/index.ts";
+import statuses from "./statuses.ts";
 
 const boards = new OpenAPIHono();
+
+// Mount nested statuses routes
+boards.route("/:boardId/statuses", statuses);
 
 // Routes
 const listBoardsRoute = createRoute({
